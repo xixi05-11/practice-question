@@ -2,13 +2,27 @@ server:
   port: 8848
   servlet:
     context-path: /api
+    session:
+      timeout: 226000
 spring:
+  profiles:
+    active: dev
   application:
     name: practice-questions
   datasource:
-    url: jdbc:mysql://localhost:3306
-    name: root
+    url: jdbc:mysql://localhost:3306/practice_question
     password: zzz123321
+    username: root
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      database: 0
+  session:
+    data:
+      redis:
+        namespace: practice_questions:session
+    timeout: 226000
 
 # springdoc-openapi项目配置
 springdoc:
