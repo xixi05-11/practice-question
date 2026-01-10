@@ -1,10 +1,11 @@
 package com.jie.practicequestions.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.jie.practicequestions.damain.dto.UserChangePwdRequest;
-import com.jie.practicequestions.damain.dto.UserEditRequest;
-import com.jie.practicequestions.damain.model.User;
-import com.jie.practicequestions.damain.vo.UserVO;
+import com.jie.practicequestions.domain.dto.EmailRequest;
+import com.jie.practicequestions.domain.dto.UserChangePwdRequest;
+import com.jie.practicequestions.domain.dto.UserEditRequest;
+import com.jie.practicequestions.domain.model.User;
+import com.jie.practicequestions.domain.vo.UserVO;
 import jakarta.servlet.http.HttpServletRequest;
 
 /**
@@ -23,12 +24,10 @@ public interface UserService extends IService<User> {
     /**
      * 用户注册
      *
-     * @param email
-     * @param emailCode
-     * @param password
+     * @param emailRequest
      * @return
      */
-    Long register(String email, String emailCode, String password);
+    Long register(EmailRequest emailRequest);
 
     /**
      * 用户登录
@@ -78,17 +77,18 @@ public interface UserService extends IService<User> {
 
     /**
      * 修改密码（邮箱验证码）
-     * @param email
-     * @param emailCode
+     *
+     * @param emailRequest
      * @param request
      * @return
      */
-    boolean changeUserPwdByEmail(String email, String emailCode,  HttpServletRequest request);
+    boolean changeUserPwdByEmail(EmailRequest emailRequest, HttpServletRequest request);
 
     /**
      * 修改邮箱
      */
-    boolean changeUserEmail(String email, String emailCode,String newEmail, HttpServletRequest request);
+    boolean changeUserEmail(String email, String emailCode, String newEmail, HttpServletRequest request);
+
     /**
      * 修改用户信息
      *

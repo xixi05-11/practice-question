@@ -1,4 +1,4 @@
-package com.jie.practicequestions.damain.model;
+package com.jie.practicequestions.domain.model;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;

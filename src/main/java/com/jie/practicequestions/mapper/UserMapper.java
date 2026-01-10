@@ -1,6 +1,6 @@
 package com.jie.practicequestions.mapper;
 
-import com.jie.practicequestions.damain.model.User;
+import com.jie.practicequestions.domain.model.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

@@ -8,11 +8,12 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jie.practicequestions.constant.EmailConstant;
 import com.jie.practicequestions.constant.UserConstant;
 import com.jie.practicequestions.constant.UserOperationConstant;
-import com.jie.practicequestions.damain.dto.UserChangePwdRequest;
-import com.jie.practicequestions.damain.dto.UserEditRequest;
-import com.jie.practicequestions.damain.enums.UserOperationEnum;
-import com.jie.practicequestions.damain.model.User;
-import com.jie.practicequestions.damain.vo.UserVO;
+import com.jie.practicequestions.domain.dto.EmailRequest;
+import com.jie.practicequestions.domain.dto.UserChangePwdRequest;
+import com.jie.practicequestions.domain.dto.UserEditRequest;
+import com.jie.practicequestions.domain.enums.UserOperationEnum;
+import com.jie.practicequestions.domain.model.User;
+import com.jie.practicequestions.domain.vo.UserVO;
 import com.jie.practicequestions.exception.BusinessException;
 import com.jie.practicequestions.exception.ErrorCode;
 import com.jie.practicequestions.mapper.UserMapper;
@@ -99,16 +100,25 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     /**
      * 注册
      *
-     * @param email
-     * @param emailCode
-     * @param password
+     * @param emailRequest
      * @return
      */
     @Override
-    public Long register(String email, String emailCode, String password) {
-        if (emailCode.isEmpty()) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "请输入验证码");
+    public Long register(EmailRequest emailRequest) {
+        String email = emailRequest.getEmail();
+        String emailCode = emailRequest.getEmailCode();
+        String password = emailRequest.getPassword();
+        String checkPassword = emailRequest.getCheckPassword();
+        if (emailCode.isEmpty() || password.isEmpty() || checkPassword.isEmpty()) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "输入不能为空");
         }
+        if (password.length() < 8 || checkPassword.length() < 8) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "密码长度不能小于8");
+        }
+        if (!password.equals(checkPassword)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "密码不一致");
+        }
+
         if (!Validator.isEmail(email)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "邮箱格式错误");
         }
@@ -134,6 +144,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if (!save) {
             throw new BusinessException(ErrorCode.OPERATION_ERROR, "注册失败");
         }
+        //删除验证码
+        stringRedisTemplate.delete(redisKey);
         return user.getId();
     }
 
@@ -196,6 +208,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             throw new BusinessException(ErrorCode.OPERATION_ERROR, "验证码错误");
         }
         request.getSession().setAttribute(UserConstant.USER_LOGIN_STATE, user);
+        //删除验证码
+        stringRedisTemplate.delete(redisKey);
         return UserVO.objToVO(user);
     }
 
@@ -271,22 +285,32 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     /**
-     * 修改密码
+     * 修改密码（邮箱验证码）
      *
-     * @param email
-     * @param emailCode
+     * @param emailRequest
      * @param request
      * @return
      */
     @Override
-    public boolean changeUserPwdByEmail(String email, String emailCode, HttpServletRequest request) {
-        if (emailCode.isEmpty() || email.isEmpty()) {
+    public boolean changeUserPwdByEmail(EmailRequest emailRequest, HttpServletRequest request) {
+        String email = emailRequest.getEmail();
+        String emailCode = emailRequest.getEmailCode();
+        String password = emailRequest.getPassword();
+        String checkPassword = emailRequest.getCheckPassword();
+        if (emailCode.isEmpty() || email.isEmpty() || password.isEmpty() || checkPassword.isEmpty()) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        if (password.length() < 8 || checkPassword.length() < 8) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "密码长度不能小于8");
+        }
+        if (!password.equals(checkPassword)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "两次输入的密码不一致");
         }
         User user = this.getLoginUser(request);
         if (!user.getEmail().equals(email)) {
             throw new BusinessException(ErrorCode.OPERATION_ERROR, "邮箱错误");
         }
+        //验证码获取
         String redisKey = UserOperationEnum.getEnumByValue(UserOperationConstant.RESET_PWD).getRedisKey(email);
         String code = stringRedisTemplate.opsForValue().get(redisKey);
         if (code == null) {
@@ -296,12 +320,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if (!emailCode.equals(code)) {
             throw new BusinessException(ErrorCode.OPERATION_ERROR, "验证码错误");
         }
-        user.setPassword(encryptPassword(emailCode));
+        user.setPassword(encryptPassword(password));
         boolean update = this.updateById(user);
         if (!update) {
             throw new BusinessException(ErrorCode.OPERATION_ERROR, "修改密码失败");
         }
         request.getSession().removeAttribute(UserConstant.USER_LOGIN_STATE);
+        //删除验证码
+        stringRedisTemplate.delete(redisKey);
         return true;
     }
 
@@ -341,6 +367,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
         //刷新登录态
         request.getSession().setAttribute(UserConstant.USER_LOGIN_STATE, user);
+        //删除验证码
+        stringRedisTemplate.delete(redisKey);
         return true;
     }
 

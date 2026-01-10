@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jie.practicequestions.mapper.UserMapper">
 
-    <resultMap id="BaseResultMap" type="com.jie.practicequestions.damain.model.User">
+    <resultMap id="BaseResultMap" type="com.jie.practicequestions.domain.model.User">
             <id property="id" column="id" />
             <result property="userAccount" column="user_account" />
             <result property="password" column="password" />

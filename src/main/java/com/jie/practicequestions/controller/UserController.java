@@ -5,11 +5,11 @@ import com.jie.practicequestions.common.BaseResponse;
 import com.jie.practicequestions.common.ResultUtils;
 import com.jie.practicequestions.config.CosClientConfig;
 import com.jie.practicequestions.cos.CosManager;
-import com.jie.practicequestions.damain.dto.EmailRequest;
-import com.jie.practicequestions.damain.dto.UserChangePwdRequest;
-import com.jie.practicequestions.damain.dto.UserEditRequest;
-import com.jie.practicequestions.damain.model.User;
-import com.jie.practicequestions.damain.vo.UserVO;
+import com.jie.practicequestions.domain.dto.EmailRequest;
+import com.jie.practicequestions.domain.dto.UserChangePwdRequest;
+import com.jie.practicequestions.domain.dto.UserEditRequest;
+import com.jie.practicequestions.domain.model.User;
+import com.jie.practicequestions.domain.vo.UserVO;
 import com.jie.practicequestions.exception.BusinessException;
 import com.jie.practicequestions.exception.ErrorCode;
 import com.jie.practicequestions.service.UserService;
@@ -98,10 +98,8 @@ public class UserController {
         if (BeanUtil.isEmpty(emailRequest)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        String email = emailRequest.getEmail();
-        String emailCode = emailRequest.getEmailCode();
-        String password = emailRequest.getPassword();
-        Long id = userService.register(email, emailCode, password);
+
+        Long id = userService.register(emailRequest);
         return ResultUtils.success(id);
     }
 
@@ -173,9 +171,7 @@ public class UserController {
         if (BeanUtil.isEmpty(emailRequest)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        String email = emailRequest.getEmail();
-        String emailCode = emailRequest.getEmailCode();
-        boolean resetPwd = userService.changeUserPwdByEmail(email, emailCode, request);
+        boolean resetPwd = userService.changeUserPwdByEmail(emailRequest,request);
         return ResultUtils.success(resetPwd);
     }
 
@@ -226,7 +222,7 @@ public class UserController {
      * 根据 id 获取包装类
      */
     @GetMapping("/get/vo")
-    public BaseResponse<UserVO> getUserVOById(long id) {
+    public BaseResponse<UserVO> getUserVOById(Long id) {
         User user = userService.getById(id);
         return ResultUtils.success(UserVO.objToVO(user));
     }

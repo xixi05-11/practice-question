@@ -1,4 +1,4 @@
-package com.jie.practicequestions.damain.dto;
+package com.jie.practicequestions.domain.dto;
 
 import lombok.Data;
 
@@ -24,6 +24,11 @@ public class EmailRequest implements Serializable {
      * 密码
      */
     private String password;
+
+    /**
+     * 确认密码
+     */
+    private String checkPassword;
 
     @Serial
     private static final long serialVersionUID = 1L;

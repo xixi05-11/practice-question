@@ -1,4 +1,4 @@
-package com.jie.practicequestions.damain.enums;
+package com.jie.practicequestions.domain.enums;
 
 import cn.hutool.core.util.ObjUtil;
 import lombok.Getter;

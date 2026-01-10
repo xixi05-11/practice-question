@@ -1,7 +1,7 @@
-package com.jie.practicequestions.damain.vo;
+package com.jie.practicequestions.domain.vo;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.jie.practicequestions.damain.model.User;
+import com.jie.practicequestions.domain.model.User;
 import lombok.Data;
 
 import java.io.Serial;
