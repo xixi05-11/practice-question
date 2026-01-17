@@ -8,59 +8,59 @@ import java.time.LocalDateTime;
 import lombok.Data;
 
 /**
- * 用户
- * @TableName s_user
+ * 题目表
+ * @TableName question
  */
-@TableName(value ="s_user")
+@TableName(value ="question")
 @Data
-public class User implements Serializable {
+public class Question implements Serializable {
     /**
-     * id
+     * 主键 id
      */
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
     /**
-     * 账号
+     * 标题
      */
-    @TableField(value = "user_account")
-    private String userAccount;
+    @TableField(value = "title")
+    private String title;
 
     /**
-     * 加密密码
+     * 题目内容
      */
-    @TableField(value = "password")
-    private String password;
+    @TableField(value = "content")
+    private String content;
 
     /**
-     * 昵称
+     * 标签列表（json 字符串）
      */
-    @TableField(value = "user_name")
-    private String userName;
+    @TableField(value = "tags")
+    private String tags;
 
     /**
-     * 用户邮箱（唯一）
+     * 推荐答案
      */
-    @TableField(value = "email")
-    private String email;
+    @TableField(value = "answer")
+    private String answer;
 
     /**
-     * 用户头像
+     * 题目难度：0-简单、1-中等、2-困难
      */
-    @TableField(value = "avatar")
-    private String avatar;
+    @TableField(value = "difficulty")
+    private Integer difficulty;
 
     /**
-     * 用户简介
+     * 点赞数
      */
-    @TableField(value = "profile")
-    private String profile;
+    @TableField(value = "thumb_num")
+    private Integer thumbNum;
 
     /**
-     * 用户角色：user/admin
+     * 创建用户 id
      */
-    @TableField(value = "role")
-    private String role;
+    @TableField(value = "user_id")
+    private Long userId;
 
     /**
      * 编辑时间
@@ -81,10 +81,10 @@ public class User implements Serializable {
     private LocalDateTime updateTime;
 
     /**
-     * 是否删除
+     * 逻辑删除：0-否 1-是
      */
     @TableLogic
-    private Integer isDelete;
+    private Integer isDeleted;
 
     @Serial
     @TableField(exist = false)

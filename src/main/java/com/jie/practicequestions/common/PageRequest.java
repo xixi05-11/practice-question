@@ -23,5 +23,10 @@ public class PageRequest {
     /**
      * 排序顺序（默认降序）
      */
-    private String sortOrder = "descend";
+    private String sortOrder = "desc";
+
+    /**
+     * 搜索关键词
+     */
+    private String searchText;
 }

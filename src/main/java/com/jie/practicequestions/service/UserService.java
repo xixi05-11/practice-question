@@ -1,9 +1,9 @@
 package com.jie.practicequestions.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.jie.practicequestions.domain.dto.EmailRequest;
-import com.jie.practicequestions.domain.dto.UserChangePwdRequest;
-import com.jie.practicequestions.domain.dto.UserEditRequest;
+import com.jie.practicequestions.domain.dto.user.EmailRequest;
+import com.jie.practicequestions.domain.dto.user.UserChangePwdRequest;
+import com.jie.practicequestions.domain.dto.user.UserEditRequest;
 import com.jie.practicequestions.domain.model.User;
 import com.jie.practicequestions.domain.vo.UserVO;
 import jakarta.servlet.http.HttpServletRequest;

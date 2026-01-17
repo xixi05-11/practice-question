@@ -24,6 +24,17 @@ spring:
         namespace: practice_questions:session
     timeout: 226000
 
+#  mybatis-plus项目配置
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      logic-delete-field: is_delete   # 实体字段名
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
 # springdoc-openapi项目配置
 springdoc:
   swagger-ui:

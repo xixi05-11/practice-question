@@ -8,59 +8,41 @@ import java.time.LocalDateTime;
 import lombok.Data;
 
 /**
- * 用户
- * @TableName s_user
+ * 题库表
+ * @TableName question_bank
  */
-@TableName(value ="s_user")
+@TableName(value ="question_bank")
 @Data
-public class User implements Serializable {
+public class QuestionBank implements Serializable {
     /**
-     * id
+     * 主键 id
      */
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
     /**
-     * 账号
+     * 题库标题
      */
-    @TableField(value = "user_account")
-    private String userAccount;
+    @TableField(value = "title")
+    private String title;
 
     /**
-     * 加密密码
+     * 题库描述
      */
-    @TableField(value = "password")
-    private String password;
+    @TableField(value = "description")
+    private String description;
 
     /**
-     * 昵称
+     * 封面图片 URL
      */
-    @TableField(value = "user_name")
-    private String userName;
+    @TableField(value = "cover_url")
+    private String coverUrl;
 
     /**
-     * 用户邮箱（唯一）
+     * 创建用户 id
      */
-    @TableField(value = "email")
-    private String email;
-
-    /**
-     * 用户头像
-     */
-    @TableField(value = "avatar")
-    private String avatar;
-
-    /**
-     * 用户简介
-     */
-    @TableField(value = "profile")
-    private String profile;
-
-    /**
-     * 用户角色：user/admin
-     */
-    @TableField(value = "role")
-    private String role;
+    @TableField(value = "user_id")
+    private Long userId;
 
     /**
      * 编辑时间
@@ -81,10 +63,10 @@ public class User implements Serializable {
     private LocalDateTime updateTime;
 
     /**
-     * 是否删除
+     * 逻辑删除
      */
     @TableLogic
-    private Integer isDelete;
+    private Integer isDeleted;
 
     @Serial
     @TableField(exist = false)

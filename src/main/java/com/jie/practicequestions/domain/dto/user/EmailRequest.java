@@ -1,4 +1,4 @@
-package com.jie.practicequestions.domain.dto;
+package com.jie.practicequestions.domain.dto.user;
 
 import lombok.Data;
 
