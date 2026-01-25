@@ -45,7 +45,7 @@ public class QuestionVO implements Serializable {
     /**
      * 难度
      */
-    private String difficulty;
+    private Integer difficulty;
 
     /**
      * 点赞数
@@ -60,7 +60,12 @@ public class QuestionVO implements Serializable {
     /**
      * 掌握程度
      */
-    private String status;
+    private Integer status;
+
+    /**
+     * 是否点赞
+     */
+    private Boolean hasThumb;
 
     /**
      * 创建时间

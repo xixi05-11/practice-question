@@ -16,10 +16,7 @@ import com.jie.practicequestions.domain.model.UserQuestionStatus;
 import com.jie.practicequestions.domain.vo.QuestionVO;
 import com.jie.practicequestions.domain.vo.UserVO;
 import com.jie.practicequestions.mapper.QuestionMapper;
-import com.jie.practicequestions.service.QuestionBankQuestionService;
-import com.jie.practicequestions.service.QuestionService;
-import com.jie.practicequestions.service.UserQuestionStatusService;
-import com.jie.practicequestions.service.UserService;
+import com.jie.practicequestions.service.*;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
@@ -46,6 +43,9 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
 
     @Resource
     private QuestionBankQuestionService questionBankQuestionService;
+
+    @Resource
+    private ThumbService thumbService;
 
 
     private static final Map<String, SFunction<Question, ?>> SORT_FIELD_MAP = new HashMap<>();
@@ -81,7 +81,11 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
                 .eq(UserQuestionStatus::getUserId, userId)
                 .eq(UserQuestionStatus::getQuestionId, question.getId())
                 .one();
-        questionVO.setStatus(UserQuestionStatusEnum.getEnumByValue(userQuestionStatus.getStatus()).getText());
+        Integer status = userQuestionStatus == null ? UserQuestionStatusEnum.NOT_DONE.getValue() :
+                userQuestionStatus.getStatus();
+        UserQuestionStatusEnum statusEnum = UserQuestionStatusEnum.getEnumByValue(status);
+        questionVO.setStatus(statusEnum.getValue());
+        questionVO.setHasThumb(thumbService.isThumb(userId,request));
         return questionVO;
     }
 

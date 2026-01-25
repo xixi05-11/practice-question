@@ -35,7 +35,7 @@ public class QuestionController {
      * 获取题目
      */
     @GetMapping("/get/id")
-    public BaseResponse<QuestionVO> getQuestionById(Long id, HttpServletRequest request) {
+    public BaseResponse<QuestionVO> getQuestionVOById(Long id, HttpServletRequest request) {
         Question question = questionService.getById(id);
         QuestionVO questionVO = questionService.getQuestionVO(question, request);
         return ResultUtils.success(questionVO);

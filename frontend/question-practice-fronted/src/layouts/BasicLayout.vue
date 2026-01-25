@@ -20,20 +20,19 @@ import GlobalHeader from '@/components/GlobalHeader.vue'
 <style scoped>
 .header {
   background: white;
-  color: unset;
   padding-inline: 20px;
-  margin-bottom: 16px;
   margin-top: 12px;
 }
+
 .content {
+  flex: 1; /* ⭐ 占据剩余空间 */
   padding: 20px;
 }
+
 .footer {
   text-align: center;
   background: #efefef;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  height: 48px;
+  line-height: 48px;
 }
 </style>
