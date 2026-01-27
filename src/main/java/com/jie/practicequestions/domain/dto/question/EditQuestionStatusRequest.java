@@ -19,5 +19,5 @@ public class EditQuestionStatusRequest implements Serializable {
     /**
      * 状态
      */
-    private String status;
+    private Integer status;
 }

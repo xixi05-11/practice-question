@@ -68,7 +68,7 @@ public class ThumbServiceImpl extends ServiceImpl<ThumbMapper, Thumb>
                 throw new BusinessException(ErrorCode.OPERATION_ERROR, "点赞失败");
             }
             boolean update = questionService.lambdaUpdate().eq(Question::getId, questionId)
-                    .setSql("thumb_num = thumb_num - 1")
+                    .setSql("thumb_num = thumb_num + 1")
                     .update();
             if (!update) {
                 throw new BusinessException(ErrorCode.OPERATION_ERROR, "点赞失败");

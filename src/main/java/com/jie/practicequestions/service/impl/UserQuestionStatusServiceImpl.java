@@ -41,14 +41,14 @@ public class UserQuestionStatusServiceImpl extends ServiceImpl<UserQuestionStatu
         Long userId = userService.getLoginUser(request).getId();
 
         Long questionId = editQuestionStatusRequest.getQuestionId();
-        String status = editQuestionStatusRequest.getStatus();
+        Integer status = editQuestionStatusRequest.getStatus();
         //判断 questionId 是否存在
         Question question = questionService.getById(questionId);
         if (question == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "题目不存在");
         }
         // 判断 status 是否存在
-        UserQuestionStatusEnum userQuestionStatusEnum = UserQuestionStatusEnum.getEnumByText(status);
+        UserQuestionStatusEnum userQuestionStatusEnum = UserQuestionStatusEnum.getEnumByValue(status);
         if (userQuestionStatusEnum == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }

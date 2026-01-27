@@ -67,7 +67,7 @@ declare namespace API {
 
   type EditQuestionStatusRequest = {
     questionId?: number
-    status?: string
+    status?: number
   }
 
   type EmailRequest = {
