@@ -35,7 +35,7 @@
             <a-dropdown>
               <a class="mark-dropdown-btn" @click.prevent> <TagOutlined />标记</a>
               <template #overlay>
-                <a-menu :selectedKeys="selectedMenuKeys" @click="handleMenuClick">
+                <a-menu :selectedKeys="selectedQuestionStatus" @click="handleMenuClick">
                   <a-menu-item key="1">
                     <a><CheckCircleOutlined style="color: green; margin-right: 5px" /> 已掌握</a>
                   </a-menu-item>
@@ -63,8 +63,11 @@
         <div class="tabs-header">
           <a-tabs v-model:activeKey="activeTab" class="answer-tabs">
             <a-tab-pane key="answer" tab="推荐答案" />
+            <a-tab-pane key="test" tab="测试一下">
+              <QuestionPractice :questionPracticeList="questionPracticeList" />
+            </a-tab-pane>
           </a-tabs>
-          <a-button type="text" class="toggle-btn" @click="toggleAnswer">
+          <a-button v-if="activeTab === 'answer'" type="text" class="toggle-btn" @click="toggleAnswer">
             <template #icon>
               <EyeInvisibleOutlined v-if="answerVisible" />
               <EyeOutlined v-else />
@@ -73,12 +76,12 @@
           </a-button>
         </div>
 
-        <a-card v-if="answerVisible" :bordered="true" class="content-card">
+        <a-card v-if="activeTab === 'answer' && answerVisible" :bordered="true" class="content-card">
           <a-typography-paragraph class="content-text">
             {{ question?.answer }}
           </a-typography-paragraph>
         </a-card>
-        <a-card v-else :bordered="true" class="content-card hidden-card">
+        <a-card v-else-if="activeTab === 'answer' && !answerVisible" :bordered="true" class="content-card hidden-card">
           <a-empty description="答案已隐藏，点击右上角显示答案" />
         </a-card>
       </a-space>
@@ -88,6 +91,7 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
 import { editQuestionStatus, getQuestionVoById } from '@/api/questionController.ts'
+import { getQuestionPracticeListByQuestionId } from '@/api/questionPracticeController.ts'
 import { computed, onMounted, ref } from 'vue'
 import { message } from 'ant-design-vue'
 import {
@@ -98,14 +102,16 @@ import {
   CloseCircleOutlined,
   CheckCircleOutlined,
 } from '@ant-design/icons-vue'
+import QuestionPractice from './QuestionPractice.vue'
 
 const route = useRoute()
 const questionId = route.path.split('/')[2]
 const question = ref<API.QuestionVO>()
 const activeTab = ref('answer')
 const answerVisible = ref(false)
+const questionPracticeList = ref<API.QuestionPracticeVO[]>([])
 
-const selectedMenuKeys = computed(() => {
+const selectedQuestionStatus = computed(() => {
   if (!question.value) return []
   const status = question.value.status
   if (status === 1) return ['1']
@@ -124,6 +130,17 @@ const getQuestionDetail = async () => {
   })
   if (res.data.code === 0 && res.data.data) {
     question.value = res.data.data
+  } else {
+    message.error(res.data.message)
+  }
+}
+
+const getQuestionPracticeList = async () => {
+  const res = await getQuestionPracticeListByQuestionId({
+    questionId: Number(questionId),
+  })
+  if (res.data.code === 0 && res.data.data) {
+    questionPracticeList.value = res.data.data
   } else {
     message.error(res.data.message)
   }
@@ -151,6 +168,7 @@ const handleMenuClick = async ({ key }: { key: string }) => {
 }
 onMounted(() => {
   getQuestionDetail()
+  getQuestionPracticeList()
 })
 </script>
 <style scoped>

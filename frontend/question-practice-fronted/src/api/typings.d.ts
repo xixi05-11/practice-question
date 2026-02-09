@@ -5,6 +5,12 @@ declare namespace API {
     message?: string
   }
 
+  type BaseResponseListQuestionPracticeVO = {
+    code?: number
+    data?: QuestionPracticeVO[]
+    message?: string
+  }
+
   type BaseResponseLong = {
     code?: number
     data?: number
@@ -17,6 +23,12 @@ declare namespace API {
     message?: string
   }
 
+  type BaseResponsePageQuestionPracticeVO = {
+    code?: number
+    data?: PageQuestionPracticeVO
+    message?: string
+  }
+
   type BaseResponsePageQuestionVO = {
     code?: number
     data?: PageQuestionVO
@@ -26,6 +38,18 @@ declare namespace API {
   type BaseResponseQuestionBankVO = {
     code?: number
     data?: QuestionBankVO
+    message?: string
+  }
+
+  type BaseResponseQuestionPracticeCheckResultVO = {
+    code?: number
+    data?: QuestionPracticeCheckResultVO
+    message?: string
+  }
+
+  type BaseResponseQuestionPracticeVO = {
+    code?: number
+    data?: QuestionPracticeVO
     message?: string
   }
 
@@ -81,6 +105,14 @@ declare namespace API {
     id: number
   }
 
+  type getQuestionPracticeByIdParams = {
+    id: number
+  }
+
+  type getQuestionPracticeListByQuestionIdParams = {
+    questionId: number
+  }
+
   type getQuestionVOByIdParams = {
     id: number
   }
@@ -111,6 +143,20 @@ declare namespace API {
     orders?: OrderItem[]
     optimizeCountSql?: PageQuestionBankVO
     searchCount?: PageQuestionBankVO
+    optimizeJoinOfCountSql?: boolean
+    maxLimit?: number
+    countId?: string
+    pages?: number
+  }
+
+  type PageQuestionPracticeVO = {
+    records?: QuestionPracticeVO[]
+    total?: number
+    size?: number
+    current?: number
+    orders?: OrderItem[]
+    optimizeCountSql?: PageQuestionPracticeVO
+    searchCount?: PageQuestionPracticeVO
     optimizeJoinOfCountSql?: boolean
     maxLimit?: number
     countId?: string
@@ -155,6 +201,43 @@ declare namespace API {
     coverUrl?: string
     userVO?: UserVO
     questionVOList?: QuestionVO[]
+    createTime?: string
+    updateTime?: string
+  }
+
+  type QuestionPracticeCheckResultVO = {
+    questionPracticeId?: number
+    isCorrect?: boolean
+    correctAnswer?: string
+    userAnswer?: string
+    explanation?: string
+  }
+
+  type QuestionPracticeQueryRequest = {
+    pageNum?: number
+    pageSize?: number
+    sortField?: string
+    sortOrder?: string
+    searchText?: string
+    id?: number
+    questionId?: number
+    type?: number
+    content?: string
+    startCreateTime?: string
+    endCreateTime?: string
+  }
+
+  type QuestionPracticeSubmitRequest = {
+    id?: number
+    userAnswer?: string
+  }
+
+  type QuestionPracticeVO = {
+    id?: number
+    questionId?: number
+    type?: number
+    content?: string
+    options?: string
     createTime?: string
     updateTime?: string
   }

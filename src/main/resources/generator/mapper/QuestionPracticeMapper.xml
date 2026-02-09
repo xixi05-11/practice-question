@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jie.practicequestions.mapper.QuestionPracticeMapper">
+
+    <resultMap id="BaseResultMap" type="com.jie.practicequestions.domain.model.QuestionPractice">
+            <id property="id" column="id" />
+            <result property="questionId" column="question_id" />
+            <result property="type" column="type" />
+            <result property="content" column="content" />
+            <result property="options" column="options" />
+            <result property="answer" column="answer" />
+            <result property="sortOrder" column="sort_order" />
+            <result property="createTime" column="create_time" />
+            <result property="updateTime" column="update_time" />
+            <result property="isDeleted" column="is_deleted" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,question_id,type,content,options,answer,
+        sort_order,create_time,update_time,is_deleted
+    </sql>
+</mapper>

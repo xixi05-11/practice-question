@@ -91,3 +91,22 @@ create table if not exists user_question_status
     index idx_question_id (question_id)
 ) comment ='用户题目掌握状态表' collate = utf8mb4_unicode_ci;
 
+
+-- 练习题目表（用于检验问答题掌握程度）
+create table if not exists question_practice
+(
+    id          bigint auto_increment comment '主键 id' primary key,
+    question_id bigint       not null comment '问答题 id，关联 question 表',
+    type        tinyint      not null comment '题型：0-单选 1-多选 2-判断',
+    content     mediumtext   not null comment '题干',
+    options     text         null comment '选项列表（json 字符串，业务层维护）',
+    answer      varchar(128) not null comment '正确答案',
+    explanation text         null comment '题目解析',
+    sort_order  int          not null default 0 comment '排序顺序',
+    create_time datetime              default CURRENT_TIMESTAMP not null comment '创建时间',
+    update_time datetime              default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
+    is_deleted  tinyint(1)   not null default 0 comment '逻辑删除：0-否 1-是',
+    index idx_question_id (question_id),
+    index idx_sort_order (sort_order)
+) comment ='练习题目表' collate = utf8mb4_unicode_ci;
+
