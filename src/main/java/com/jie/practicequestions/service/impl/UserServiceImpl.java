@@ -2,6 +2,7 @@ package com.jie.practicequestions.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.Validator;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -11,6 +12,7 @@ import com.jie.practicequestions.constant.UserOperationConstant;
 import com.jie.practicequestions.domain.dto.user.EmailRequest;
 import com.jie.practicequestions.domain.dto.user.UserChangePwdRequest;
 import com.jie.practicequestions.domain.dto.user.UserEditRequest;
+import com.jie.practicequestions.domain.dto.user.UserQueryRequest;
 import com.jie.practicequestions.domain.enums.UserOperationEnum;
 import com.jie.practicequestions.domain.model.User;
 import com.jie.practicequestions.domain.vo.UserVO;
@@ -25,6 +27,7 @@ import jakarta.annotation.Resource;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -445,9 +448,84 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     /**
+     * 重置密码
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public boolean resetPassword(Long userId) {
+        User user = this.getById(userId);
+        if (user == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户不存在");
+        }
+        user.setPassword(this.encryptPassword(UserConstant.DEFAULT_PASSWORD));
+        return this.updateById(user);
+    }
+
+
+    /**
+     * 获取查询条件
+     *
+     * @param userQueryRequest
+     * @return
+     */
+    @Override
+    public QueryWrapper<User> getQueryWrapper(UserQueryRequest userQueryRequest) {
+        if (userQueryRequest == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数为空");
+        }
+        Long id = userQueryRequest.getId();
+        String userAccount = userQueryRequest.getUserAccount();
+        String userName = userQueryRequest.getUserName();
+        String userProfile = userQueryRequest.getUserProfile();
+        String userRole = userQueryRequest.getUserRole();
+        String email = userQueryRequest.getEmail();
+        LocalDateTime startCreateTime = userQueryRequest.getStartCreateTime();
+        LocalDateTime endCreateTime = userQueryRequest.getEndCreateTime();
+        LocalDateTime startEditTime = userQueryRequest.getStartEditTime();
+        LocalDateTime endEditTime = userQueryRequest.getEndEditTime();
+        String sortField = userQueryRequest.getSortField();
+        String sortOrder = userQueryRequest.getSortOrder();
+
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+
+        // id 精确查询
+        queryWrapper.eq(id != null, "id", id);
+
+        // 用户角色精确查询
+        queryWrapper.eq(StringUtils.isNotBlank(userRole), "role", userRole);
+
+        // 邮箱模糊查询
+        queryWrapper.like(StringUtils.isNotBlank(email), "email", email);
+
+        // 账号模糊查询
+        queryWrapper.like(StringUtils.isNotBlank(userAccount), "user_account", userAccount);
+
+        // 简介模糊查询
+        queryWrapper.like(StringUtils.isNotBlank(userProfile), "profile", userProfile);
+
+        // 昵称模糊查询
+        queryWrapper.like(StringUtils.isNotBlank(userName), "user_name", userName);
+
+        // 创建时间范围查询
+        queryWrapper.ge(startCreateTime != null, "create_time", startCreateTime);
+        queryWrapper.le(endCreateTime != null, "create_time", endCreateTime);
+
+        // 编辑时间范围查询
+        queryWrapper.ge(startEditTime != null, "edit_time", startEditTime);
+        queryWrapper.le(endEditTime != null, "edit_time", endEditTime);
+
+        // 排序
+        queryWrapper.orderBy(StrUtil.isNotEmpty(sortField), sortOrder.equals("ascend"), sortField);
+
+        return queryWrapper;
+    }
+    /**
      * 加密密码
      */
-    private String encryptPassword(String password) {
+    @Override
+    public String encryptPassword(String password) {
         String salt = "jie";
         return DigestUtils.md5DigestAsHex((salt + password).getBytes());
     }

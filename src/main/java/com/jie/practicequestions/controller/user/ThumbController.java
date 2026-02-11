@@ -1,4 +1,4 @@
-package com.jie.practicequestions.controller;
+package com.jie.practicequestions.controller.user;
 
 import com.jie.practicequestions.common.BaseResponse;
 import com.jie.practicequestions.common.ResultUtils;

@@ -44,9 +44,12 @@ springdoc:
   api-docs:
     path: /v3/api-docs
   group-configs:
-    - group: 'default'
+    - group: 'user'
       paths-to-match: '/**'
-      packages-to-scan: com.jie.practicequestions.controller
+      packages-to-scan: com.jie.practicequestions.controller.user
+    - group: 'admin'
+      paths-to-match: '/admin/**'
+      packages-to-scan: com.jie.practicequestions.controller.admin
 # knife4j的增强配置，不需要增强可以不配
 knife4j:
   enable: true

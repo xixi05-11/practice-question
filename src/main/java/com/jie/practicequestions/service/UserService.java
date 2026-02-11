@@ -1,9 +1,11 @@
 package com.jie.practicequestions.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.jie.practicequestions.domain.dto.user.EmailRequest;
 import com.jie.practicequestions.domain.dto.user.UserChangePwdRequest;
 import com.jie.practicequestions.domain.dto.user.UserEditRequest;
+import com.jie.practicequestions.domain.dto.user.UserQueryRequest;
 import com.jie.practicequestions.domain.model.User;
 import com.jie.practicequestions.domain.vo.UserVO;
 import jakarta.servlet.http.HttpServletRequest;
@@ -97,4 +99,28 @@ public interface UserService extends IService<User> {
      * @return
      */
     boolean editUser(UserEditRequest userEditRequest, HttpServletRequest request);
+
+    /**
+     * 重置密码
+     *
+     * @param userId
+     * @return
+     */
+    boolean resetPassword(Long userId);
+
+    /**
+     * 获取查询条件
+     *
+     * @param userQueryRequest
+     * @return
+     */
+    QueryWrapper<User> getQueryWrapper(UserQueryRequest userQueryRequest);
+
+    /**
+     * 加密密码
+     *
+     * @param password
+     * @return
+     */
+    String encryptPassword(String password);
 }

@@ -1,4 +1,4 @@
-package com.jie.practicequestions.controller;
+package com.jie.practicequestions.controller.user;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
