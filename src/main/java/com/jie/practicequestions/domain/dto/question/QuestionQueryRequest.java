@@ -35,7 +35,7 @@ public class QuestionQueryRequest extends PageRequest implements Serializable {
     /**
      * 题目难度
      */
-    private String difficulty;
+    private Integer difficulty;
 
     /**
      * 点赞数

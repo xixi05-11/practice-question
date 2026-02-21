@@ -63,6 +63,11 @@ public class QuestionVO implements Serializable {
     private Integer status;
 
     /**
+     * 所属题库
+     */
+    private List<String> questionBank;
+
+    /**
      * 是否点赞
      */
     private Boolean hasThumb;

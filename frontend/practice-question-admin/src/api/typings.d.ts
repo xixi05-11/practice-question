@@ -17,6 +17,12 @@ declare namespace API {
     message?: string
   }
 
+  type BaseResponsePageQuestionVO = {
+    code?: number
+    data?: PageQuestionVO
+    message?: string
+  }
+
   type BaseResponsePageUserVO = {
     code?: number
     data?: PageUserVO
@@ -26,6 +32,12 @@ declare namespace API {
   type BaseResponseQuestionBankVO = {
     code?: number
     data?: QuestionBankVO
+    message?: string
+  }
+
+  type BaseResponseQuestionVO = {
+    code?: number
+    data?: QuestionVO
     message?: string
   }
 
@@ -59,6 +71,10 @@ declare namespace API {
     id: number
   }
 
+  type getQuestionByIdParams = {
+    id: number
+  }
+
   type getUserByIdParams = {
     id: number
   }
@@ -87,6 +103,20 @@ declare namespace API {
     pages?: number
   }
 
+  type PageQuestionVO = {
+    records?: QuestionVO[]
+    total?: number
+    size?: number
+    current?: number
+    orders?: OrderItem[]
+    optimizeCountSql?: PageQuestionVO
+    searchCount?: PageQuestionVO
+    optimizeJoinOfCountSql?: boolean
+    maxLimit?: number
+    countId?: string
+    pages?: number
+  }
+
   type PageUserVO = {
     records?: UserVO[]
     total?: number
@@ -99,6 +129,15 @@ declare namespace API {
     maxLimit?: number
     countId?: string
     pages?: number
+  }
+
+  type QuestionAddRequest = {
+    title?: string
+    content?: string
+    tagList?: string[]
+    answer?: string
+    difficulty?: number
+    questionBankIdList?: number[]
   }
 
   type QuestionBankAddRequest = {
@@ -142,6 +181,36 @@ declare namespace API {
     updateTime?: string
   }
 
+  type QuestionEditRequest = {
+    id?: number
+    title?: string
+    content?: string
+    tagList?: string[]
+    answer?: string
+    difficulty?: number
+    questionBankIdList?: number[]
+  }
+
+  type QuestionQueryRequest = {
+    pageNum?: number
+    pageSize?: number
+    sortField?: string
+    sortOrder?: string
+    searchText?: string
+    id?: number
+    title?: string
+    content?: string
+    tagList?: string[]
+    difficulty?: number
+    thumbNum?: number
+    userId?: number
+    startEditTime?: string
+    endEditTime?: string
+    startCreateTime?: string
+    endCreateTime?: string
+    questionBankId?: number
+  }
+
   type QuestionVO = {
     id?: number
     title?: string
@@ -152,6 +221,7 @@ declare namespace API {
     thumbNum?: number
     userVO?: UserVO
     status?: number
+    questionBank?: string[]
     hasThumb?: boolean
     createTime?: string
     updateTime?: string

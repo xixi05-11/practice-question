@@ -45,6 +45,9 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
     private QuestionBankQuestionService questionBankQuestionService;
 
     @Resource
+    private QuestionBankService questionBankService;
+
+    @Resource
     private ThumbService thumbService;
 
 
@@ -86,6 +89,16 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
         UserQuestionStatusEnum statusEnum = UserQuestionStatusEnum.getEnumByValue(status);
         questionVO.setStatus(statusEnum.getValue());
         questionVO.setHasThumb(thumbService.isThumb(userId,request));
+        // 设置题库
+        List<QuestionBankQuestion> questionBankQuestionList = questionBankQuestionService.lambdaQuery()
+                .select(QuestionBankQuestion::getQuestionBankId)
+                .eq(QuestionBankQuestion::getQuestionId, question.getId())
+                .list();
+        List<String> bank = questionBankQuestionList.stream()
+                .map(questionBankQuestion ->
+                        questionBankService.getById(questionBankQuestion.getQuestionBankId()).getTitle())
+                .toList();
+        questionVO.setQuestionBank(bank);
         return questionVO;
     }
 
@@ -101,7 +114,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
         String title = questionQueryRequest.getTitle();
         String content = questionQueryRequest.getContent();
         List<String> tagList = questionQueryRequest.getTagList();
-        String difficulty = questionQueryRequest.getDifficulty();
+        Integer difficulty = questionQueryRequest.getDifficulty();
         Long userId = questionQueryRequest.getUserId();
         LocalDateTime startCreateTime = questionQueryRequest.getStartCreateTime();
         LocalDateTime endCreateTime = questionQueryRequest.getEndCreateTime();
@@ -131,11 +144,9 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
                 queryWrapper.like(Question::getTags, "\"" + tag + "\"");
             }
         }
-        if (StrUtil.isNotBlank(difficulty)) {
-            QuestionDiffEnum diffEnum = QuestionDiffEnum.getEnumByText(difficulty);
-            if (diffEnum != null) {
-                queryWrapper.eq(Question::getDifficulty, diffEnum.getValue());
-            }
+        if (difficulty != null) {
+            queryWrapper.eq(Question::getDifficulty, difficulty);
+
         }
         queryWrapper.eq(userId !=  null, Question::getUserId, userId);
         // 创建时间

@@ -78,9 +78,12 @@ export async function getQuestionBankList(
 }
 
 /** 此处后端没有提供注释 POST /admin/bank/upload */
-export async function uploadQuestionBank(body: FormData, options?: { [key: string]: any }) {
+export async function uploadQuestionBank(body: {}, options?: { [key: string]: any }) {
   return request<API.BaseResponseString>('/admin/bank/upload', {
     method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
     data: body,
     ...(options || {}),
   })
