@@ -84,6 +84,8 @@
         <a-card v-else-if="activeTab === 'answer' && !answerVisible" :bordered="true" class="content-card hidden-card">
           <a-empty description="答案已隐藏，点击右上角显示答案" />
         </a-card>
+
+        <QuestionComment v-if="question?.id" :question-id="question.id" />
       </a-space>
     </a-card>
   </div>
@@ -103,6 +105,7 @@ import {
   CheckCircleOutlined,
 } from '@ant-design/icons-vue'
 import QuestionPractice from './QuestionPractice.vue'
+import QuestionComment from './QuestionComment.vue'
 
 const route = useRoute()
 const questionId = route.path.split('/')[2]

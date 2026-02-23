@@ -23,6 +23,12 @@ declare namespace API {
     message?: string
   }
 
+  type BaseResponsePageQuestionCommentVO = {
+    code?: number
+    data?: PageQuestionCommentVO
+    message?: string
+  }
+
   type BaseResponsePageQuestionPracticeVO = {
     code?: number
     data?: PageQuestionPracticeVO
@@ -38,6 +44,12 @@ declare namespace API {
   type BaseResponseQuestionBankVO = {
     code?: number
     data?: QuestionBankVO
+    message?: string
+  }
+
+  type BaseResponseQuestionCommentVO = {
+    code?: number
+    data?: QuestionCommentVO
     message?: string
   }
 
@@ -101,6 +113,10 @@ declare namespace API {
     checkPassword?: string
   }
 
+  type getCommentParams = {
+    id: number
+  }
+
   type getQuestionBankByIdParams = {
     id: number
   }
@@ -143,6 +159,20 @@ declare namespace API {
     orders?: OrderItem[]
     optimizeCountSql?: PageQuestionBankVO
     searchCount?: PageQuestionBankVO
+    optimizeJoinOfCountSql?: boolean
+    maxLimit?: number
+    countId?: string
+    pages?: number
+  }
+
+  type PageQuestionCommentVO = {
+    records?: QuestionCommentVO[]
+    total?: number
+    size?: number
+    current?: number
+    orders?: OrderItem[]
+    optimizeCountSql?: PageQuestionCommentVO
+    searchCount?: PageQuestionCommentVO
     optimizeJoinOfCountSql?: boolean
     maxLimit?: number
     countId?: string
@@ -205,6 +235,40 @@ declare namespace API {
     updateTime?: string
   }
 
+  type QuestionCommentAddRequest = {
+    questionId?: number
+    content?: string
+    parentId?: number
+    replyUserId?: number
+  }
+
+  type QuestionCommentQueryRequest = {
+    pageNum?: number
+    pageSize?: number
+    sortField?: string
+    sortOrder?: string
+    searchText?: string
+    questionId?: number
+    rootId?: number
+    userId?: number
+    childrenLimit?: number
+  }
+
+  type QuestionCommentVO = {
+    id?: number
+    questionId?: number
+    content?: string
+    parentId?: number
+    rootId?: number
+    thumbNum?: number
+    userVO?: UserVO
+    replyUserVO?: UserVO
+    hasThumb?: boolean
+    createTime?: string
+    children?: QuestionCommentVO[]
+    childrenCount?: number
+  }
+
   type QuestionPracticeCheckResultVO = {
     questionPracticeId?: number
     isCorrect?: boolean
@@ -252,7 +316,7 @@ declare namespace API {
     title?: string
     content?: string
     tagList?: string[]
-    difficulty?: string
+    difficulty?: number
     thumbNum?: number
     userId?: number
     startEditTime?: string
@@ -272,6 +336,7 @@ declare namespace API {
     thumbNum?: number
     userVO?: UserVO
     status?: number
+    questionBank?: string[]
     hasThumb?: boolean
     createTime?: string
     updateTime?: string

@@ -6,11 +6,13 @@ import * as userController from './userController'
 import * as questionPracticeController from './questionPracticeController'
 import * as questionBankController from './questionBankController'
 import * as questionController from './questionController'
+import * as questionCommentController from './questionCommentController'
 import * as thumbController from './thumbController'
 export default {
   userController,
   questionPracticeController,
   questionBankController,
   questionController,
+  questionCommentController,
   thumbController,
 }

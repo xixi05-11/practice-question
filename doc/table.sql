@@ -26,7 +26,7 @@ create table if not exists question
     content     mediumtext                         not null comment '题目内容',
     tags        varchar(1024)                      null comment '标签列表（json 字符串）',
     answer      mediumtext                         not null comment '推荐答案',
-    difficulty  int      default 0               not null comment '题目难度：0-简单、1-中等、2-困难',
+    difficulty  int      default 0                 not null comment '题目难度：0-简单、1-中等、2-困难',
     thumb_num   int      default 0                 not null comment '点赞数',
     user_id     bigint                             not null comment '创建用户 id',
     edit_time   datetime default CURRENT_TIMESTAMP not null comment '编辑时间',
@@ -109,4 +109,27 @@ create table if not exists question_practice
     index idx_question_id (question_id),
     index idx_sort_order (sort_order)
 ) comment ='练习题目表' collate = utf8mb4_unicode_ci;
+
+
+-- 题目评论表
+create table if not exists question_comment
+(
+    id            bigint auto_increment comment '主键 id' primary key,
+    question_id   bigint                             not null comment '题目 id',
+    user_id       bigint                             not null comment '评论用户 id',
+    content       varchar(2048)                      not null comment '评论内容',
+    parent_id     bigint                             null comment '父评论 id（一级评论为 null，二级评论为父评论 id）',
+    root_id       bigint                             null comment '根评论 id（一级评论为 null，二级评论指向最上层一级评论）',
+    reply_user_id bigint                             null comment '被回复的用户 id（用于显示"回复 @xxx"）',
+    thumb_num     int      default 0                 not null comment '点赞数',
+    is_deleted    tinyint(1)                         not null default 0 comment '逻辑删除：0-否 1-是',
+    create_time   datetime default CURRENT_TIMESTAMP not null comment '创建时间',
+    update_time   datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
+    -- 索引
+    index idx_question_id (question_id),
+    index idx_root_id (root_id),
+    index idx_user_id (user_id),
+    index idx_parent_id (parent_id)
+) comment ='题目评论表' collate = utf8mb4_unicode_ci;
+
 
